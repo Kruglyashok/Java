@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pointGUI.ClientThread;
 /**
  *
  * @author One
@@ -27,14 +26,12 @@ public class ServerListener extends Thread {
     Socket cs;
     DataInputStream dis;
     DataOutputStream dos;
-    ArrayList<String> list = new ArrayList<>();
+    ArrayList<String> list = new ArrayList<String>();
     ObjectInputStream ois;
     ObjectOutputStream oos;   
     
     String s;
-    private void initConnection() {
-    
-    }
+   
     @Override 
     public void run() {
             try {
@@ -44,15 +41,20 @@ public class ServerListener extends Thread {
                 dos = new DataOutputStream(cs.getOutputStream());
                 oos = new ObjectOutputStream(cs.getOutputStream());
                 ois = new ObjectInputStream(cs.getInputStream());
+               
+                
                 System.out.append("Client Connected\n");
-            list.add("d");
+            //list.add("d");
             while(true) {
                 s = dis.readUTF();
                 if (s.equals("0")) {
-                    System.out.append("00000\n");
+                    if (!list.isEmpty()) {
+                   // System.out.append("00000\n");
+                   oos.reset();
                     System.out.println(list);
-                    oos.writeObject((String)list.get(0));
-                    oos.flush();
+                    oos.writeObject(list);
+                    //oos.flush();
+                    }
                 }
                 else {
                     list.add(s);
@@ -63,8 +65,8 @@ public class ServerListener extends Thread {
             } catch (IOException ex) {
                 Logger.getLogger(ServerListener.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
         
+                    
    }
    
    public ServerListener(int port, InetAddress ip) {

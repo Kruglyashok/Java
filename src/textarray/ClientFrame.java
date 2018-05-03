@@ -42,8 +42,9 @@ public class ClientFrame extends javax.swing.JFrame {
             cs = new Socket(ip, port);
             dis = new DataInputStream(cs.getInputStream());
             dos = new DataOutputStream(cs.getOutputStream());
+              
             oos = new ObjectOutputStream(cs.getOutputStream());
-            ois = new ObjectInputStream(cs.getInputStream());
+          ois = new ObjectInputStream(cs.getInputStream());
         } catch (UnknownHostException ex) {
             Logger.getLogger(ClientFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -74,8 +75,14 @@ public class ClientFrame extends javax.swing.JFrame {
                 public void run() {
                     while(true) {
                         try {
-                           // list = (ArrayList<String>) ois.readObject();
-                            String sg = (String) ois.readObject();
+                           list = (ArrayList) ois.readObject();
+                           jTextArea1.setText("");
+                           int ind =0;
+                           for (String str : list) { 
+                           jTextArea1.append(list.get(ind) + "\n");
+                           ind++;
+                           }
+                           // String sg = (String) ois.readObject();
                             System.out.println(list);
                         } catch (IOException ex) {
                             Logger.getLogger(ClientFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,7 +92,7 @@ public class ClientFrame extends javax.swing.JFrame {
                     }
                 }
         }.start();
-        
+       
     }
 
     /**
